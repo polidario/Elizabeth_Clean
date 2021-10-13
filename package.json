@@ -1,0 +1,17 @@
+{
+  "name": "Elizabeth",
+  "version": "1.0.0",
+  "description": "[![Generic badge](https://img.shields.io/badge/course%20available%3F-not%20yet-red.svg)](https://shields.io/)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.3.7",
+    "postcss": "^8.3.9",
+    "tailwindcss": "^2.2.16"
+  }
+}
