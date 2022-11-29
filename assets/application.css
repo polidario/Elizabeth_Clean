@@ -1,0 +1,12 @@
+body {
+    background-color: rgb(251, 251, 232);
+}
+
+.homepage {
+    text-align: center;
+    padding-top: 10em;
+}
+
+.logo {
+    width: 25%;
+}
