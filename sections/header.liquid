@@ -1,0 +1,39 @@
+<div class="relative bg-white">
+    <div class="mx-auto px-4 sm:px-6">
+      <div class="flex justify-center items-center py-6 md:justify-start md:space-x-10">
+        <!-- STORE NAME / STORE LOGO -->
+        <div class="flex justify-start lg:flex-1 truncate">
+          <h1 class="text-xl font-bold truncate">{{ shop.name }}</h1>
+        </div>
+  
+        <!-- NAVIGATION MENU -->
+        <nav class="hidden md:flex space-x-10">
+            {% for link in linklists.main-menu.links %}
+                {% if link.links != blank %}
+                    <div class="relative">
+                        <button type="button" class="inline-flex items-center text-base text-gray-500 hover:text-gray-900">
+                          {{ link.title }} {% render 'icon-dropdown' %}
+                        </button>
+                      </div>
+                      {% else %}
+                      <div class="relative">
+                        <a href="{{ link.url }}" class="text-base text-gray-500 hover:text-gray-900 {% if link.active == true %}text-blue-900{% endif %}">{{ link.title }}</a>
+                    </div>
+                {% endif %}
+            {% endfor %}        
+        </nav>
+
+        <div class="hidden md:flex items-center justify-end md:flex-1 space-x-5">
+          <a href="{{ routes.cart_url }}" class="whitespace-nowrap text-base text-gray-500 hover:text-gray-900">
+            {% render 'icon-shopping-bag' %}
+          </a>
+          <a href="{{ routes.account_login_url }}" class="text-base text-gray-500 hover:text-gray-900">
+            Login
+          </a>
+          <a href="{{ routes.account_register_url }}" class="text-base text-gray-500 hover:text-gray-900">
+            Register
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>

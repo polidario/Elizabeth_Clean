@@ -12,7 +12,8 @@
     {{ 'application.css' | asset_url | stylesheet_tag }}
     {{ 'application.js' | asset_url | script_tag }}
   </head>
-  <body class="bg-red-900 p-20">
+  <body>
+    {% section 'header' %}
     <main role="main">
       {{ content_for_layout }}
     </main>
