@@ -1,73 +1,95 @@
-{% for block in section.blocks %}
-    {% case block.type %}
-        {% when 'article_title' %}
-            <h1>{{ article.title }}</h1>
+<article class='p-8'>
+    {% for block in section.blocks %}
+        {% case block.type %}
+            {% when 'article_title' %}
+                <div class="flex items-center justify-center">
+                    <div class="max-w-7xl text-center">
+                        <a href="{{ blog.url }}" class="text-base uppercase text-gray-500 hover:text-gray-900 font-bold">{{ blog.title }}</a>
+                        <h1 class="h1 text-4xl md:text-6xl font-medium">{{ article.title }}</h1>
+                    </div>
+                </div>
 
-        {% when 'article_author'%}
-            {% if section.settings.enable_author %}
-                <small>{{ article.author }}</small>
-            {% endif %}
+            {% when 'article_author'%}
+                <div class="flex items-center justify-center">
+                    <div class="max-w-7xl text-center">
+                        {% if section.settings.enable_author %}
+                            <small>Written by {{ article.author }}</small>
+                        {% endif %}
+                    </div>
+                </div>
 
-        {% when 'article_published_date'%}
-            {% if section.settings.enable_published_date %}
-                <time datetime="{{ article.published_at | date: '%Y-%m-%d f' }}">{{ article.published_at | date: '%Y-%m-%d' }}</time>
-            {% endif %}
+
+            {% when 'article_published_date'%}
+                <div class="flex items-center justify-center">
+                    <div class="max-w-7xl text-center">
+                        {% if section.settings.enable_published_date %}
+                            <time datetime="{{ article.published_at | date: '%Y-%m-%d f' }}">{{ article.published_at | date: format: 'on_date' }}</time>
+                        {% endif %}
+                    </div>
+                </div>
 
 
-        {% when 'featured_image' %}
-            <img src="{{ article.image | img_url: 'large'}}" alt="{{ article.image.alt }}">
+            {% when 'featured_image' %}
+                <div class="max-w-7xl bg-blue-100 rounded-lg mx-2 md:mx-auto overflow-hidden">
+                    {% if article.image != blank %}
+                        <img class="w-full h-80 md:h-96 object-cover object-center p-5 my-4" src="{{ article.image | img_url: 'large'}}" alt="{{ article.image.alt }}">
+                        {% else %}
+                            {% assign placeholder_image = 'lifestyle-2' %}
+                            {{ placeholder_image | placeholder_svg_tag: 'w-full h-80 md:h-96 object-cover object-center p-5' }}
+                    {% endif %}
+                </div>
 
-        {% when 'article_content'%}
-            <div class=""> {{ article.content }}</div>
+            {% when 'article_content'%}
+                <div class=""> {{ article.content }}</div>
 
-    {% endcase %}
-{% endfor %}
-
+        {% endcase %}
+    {% endfor %}
+</article>
 
 
 {% schema %}
-    {
-        "name": "Template Article",
-        "settings": [
-            {
-                "type": "checkbox",
-                "id": "enable_author",
-                "default": true,
-                "label": "Display Author Name"
-            },
-            {
-                "type": "checkbox",
-                "id": "enable_published_date",
-                "default": true,
-                "label": "Display Published Date"
-            }
-        ],
-        "blocks": [
-            {
-                "type": "article_title",
-                "name": "Title",
-                "limit": 1
-            },
-            {
-                "type": "article_author",
-                "name": "Author",
-                "limit": 1
-            },
-            {
-                "type": "article_published_date",
-                "name": "Published Date",
-                "limit": 1
-            },
-            {
-                "type": "featured_image",
-                "name": "Thumbnail",
-                "limit": 1
-            },
-            {
-                "type": "article_content",
-                "name": "Content",
-                "limit": 1
-            }
-        ]
-    }
+{
+    "name": "Template Article",
+    "settings": [
+        {
+            "type": "checkbox",
+            "id": "enable_author",
+            "default": true,
+            "label": "Display Author Name"
+        },
+        {
+            "type": "checkbox",
+            "id": "enable_published_date",
+            "default": true,
+            "label": "Display Published Date"
+        }
+    ],
+    "blocks": [
+        {
+            "type": "article_title",
+            "name": "Title",
+            "limit": 1
+        },
+        {
+            "type": "article_author",
+            "name": "Author",
+            "limit": 1
+        },
+        {
+            "type": "article_published_date",
+            "name": "Published Date",
+            "limit": 1
+        },
+        {
+            "type": "featured_image",
+            "name": "Thumbnail",
+            "limit": 1
+        },
+        {
+            "type": "article_content",
+            "name": "Content",
+            "limit": 1
+        }
+    ]
+}
 {% endschema %} 
