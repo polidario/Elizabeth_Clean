@@ -1,9 +1,11 @@
+{% assign main_menu_linklist = linklists[section.settings.menu].links %}
+
 <div class="relative bg-white" x-data="{ mobileMenuOpen : false }">
     <div class="mx-auto px-4 sm:px-6">
       <div class="flex justify-between items-center py-6 md:justify-start md:space-x-10">
         <!-- STORE NAME / STORE LOGO -->
         <div class="flex justify-start lg:flex-1 truncate">
-          <h1 class="text-xl font-bold truncate">{{ shop.name }}</h1>
+          <h1 class="text-xl font-bold truncate">{{ section.settings.mobile_menu_title }}</h1>
         </div>
 
         <div class="-mr-2 -my-2 ml-3 md:hidden">
@@ -14,7 +16,7 @@
   
         <!-- NAVIGATION MENU -->
         <nav class="hidden md:flex space-x-10" >
-            {% for link in linklists.main-menu.links %}
+            {% for link in main_menu_linklist %}
                 {% if link.links != blank %}
                     <div class="relative" x-data="{ open : false }">
                         <button type="button" class="inline-flex items-center text-base text-gray-500 hover:text-gray-900" x-on:click="open = ! open">
@@ -51,12 +53,15 @@
           <a href="{{ routes.cart_url }}" class="whitespace-nowrap text-base text-gray-500 hover:text-gray-900">
             {% render 'icon-shopping-bag' %}
           </a>
-          <a href="{{ routes.account_login_url }}" class="text-base text-gray-500 hover:text-gray-900">
-            Login
-          </a>
-          <a href="{{ routes.account_register_url }}" class="text-base text-gray-500 hover:text-gray-900">
-            Register
-          </a>
+        
+          {% if shop.customer_accounts_enabled %}
+            <a href="{{ routes.account_login_url }}" class="text-base text-gray-500 hover:text-gray-900">
+                Login
+            </a>
+            <a href="{{ routes.account_register_url }}" class="text-base text-gray-500 hover:text-gray-900">
+                Register
+            </a>
+          {% endif %}
         </div>
       </div>
     </div>
@@ -80,7 +85,7 @@
                 <div class="pt-3">
                     <nav class="grid gap-y-7">
 
-                        {% for link in linklists.main-menu.links %}
+                        {% for link in main_menu_linklist %}
                             {% assign link_handle = link.handle %}
                             {% if link.links != blank %}
                                 <div class="relative" x-data="{ {{ link_handle }}: false }">
@@ -107,4 +112,25 @@
             </div>
         </div>
     </div>
-  </div>
+</div>
+
+{% schema %}
+    {
+        "name": "Nav Bar",    
+        "settings": [
+            {
+                "type": "text",
+                "id": "mobile_menu_title",
+                "label": "Title",
+                "default": "Menu",
+                "info": "This is the title for the mobile menu window"
+            },
+            {
+                "type": "link_list",
+                "id": "menu",
+                "label": "Header Menu",
+                "default": "main-menu"
+            }
+        ]
+    }
+{% endschema %}
