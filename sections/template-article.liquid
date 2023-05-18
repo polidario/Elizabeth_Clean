@@ -1,19 +1,19 @@
-<article class='p-8'>
+<article class='p-8' itemscope itemtype="http://schema.org/BlogPosting">
     {% for block in section.blocks %}
         {% case block.type %}
             {% when 'article_title' %}
                 <div class="flex items-center justify-center">
                     <div class="max-w-7xl text-center">
                         <a href="{{ blog.url }}" class="text-base uppercase text-gray-500 hover:text-gray-900 font-bold">{{ blog.title }}</a>
-                        <h1 class="h1 text-4xl md:text-6xl font-medium">{{ article.title }}</h1>
+                        <h1 class="h1 text-4xl md:text-6xl font-medium" itemprop="headline">{{ article.title }}</h1>
                     </div>
                 </div>
 
             {% when 'article_author'%}
                 <div class="flex items-center justify-center">
-                    <div class="max-w-7xl text-center">
+                    <div class="max-w-7xl text-center" itemscope itemtype="https://schema.org/Person">
                         {% if section.settings.enable_author %}
-                            <small>Written by {{ article.author }}</small>
+                            <small itemprop="person">{{ article.author }}</small>
                         {% endif %}
                     </div>
                 </div>
@@ -23,14 +23,14 @@
                 <div class="flex items-center justify-center">
                     <div class="max-w-7xl text-center">
                         {% if section.settings.enable_published_date %}
-                            <time datetime="{{ article.published_at | date: '%Y-%m-%d f' }}">{{ article.published_at | date: format: 'on_date' }}</time>
+                            <time itemprop="datePublished dateCreated" datetime="{{ article.published_at | date: '%Y-%m-%d f' }}">{{ article.published_at | date: format: 'on_date' }}</time>
                         {% endif %}
                     </div>
                 </div>
 
 
             {% when 'featured_image' %}
-                <div class="max-w-7xl bg-blue-100 rounded-lg mx-2 md:mx-auto overflow-hidden">
+                <div class="max-w-7xl bg-blue-100 rounded-lg mx-2 md:mx-auto overflow-hidden" itemprop="image">
                     {% if article.image != blank %}
                         <img class="w-full h-80 md:h-96 object-cover object-center p-5 my-4" src="{{ article.image | img_url: 'large'}}" alt="{{ article.image.alt }}">
                         {% else %}
@@ -40,11 +40,38 @@
                 </div>
 
             {% when 'article_content'%}
-                <div class=""> {{ article.content }}</div>
+                <div itemprop="articleBody" class="max-w-4xl"> {{ article.content }}</div>
 
         {% endcase %}
     {% endfor %}
 </article>
+
+<script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": {{ article.title | json }},
+        "articleBody": {{ article.content | strip_html | json }},
+        {% if article.exerpt != blank %}
+            "description": { { article.excerpt} | strip_html | json },
+        {% endif %}
+        {% if article.image %}
+            "image": [
+                {{ article.image | image_url: "medium" | prepend: 'https:' | json }} 
+            ],
+        {% endif %}
+        "datePublished": {{ article.published_at | date: format: "default" | json }},
+        "dateCreated": {{ article.published_at | date: format: "default" | json }},
+        "author": {
+            "@type": "Person",
+            "name": {{ article.author | json }}
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": {{ shop.name | json }}
+        }
+    }
+</script>
 
 
 {% schema %}
