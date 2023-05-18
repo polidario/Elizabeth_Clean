@@ -1,0 +1,22 @@
+<h1>{{ section.settings.title }}</h1>
+<p>{{ section.settings.subtext }}</p>
+
+{% schema %}
+    {
+        "name": "Template 404",
+        "settings": [
+            {
+                "type:": "text",
+                "id": "title",
+                "label": "Title",
+                "default": "404"
+            },
+            {
+                "type:": "text",
+                "id": "subtext",
+                "label": "Subtext",
+                "default": "notfound"
+            }
+        ]
+    }
+{% endschema %}
