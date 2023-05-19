@@ -12,6 +12,9 @@
     {{ 'application.css' | asset_url | stylesheet_tag }}
     {{ 'application.js' | asset_url | script_tag }}
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+      [x-cloak] { display: none !important; }
+    </style>
   </head>
   <body>
     {% section 'header' %}
