@@ -53,25 +53,32 @@
                         </div>
                     </div>
                     <div class="wi-full my-4 md:w-80">
-                        <h3 class="text-xl">Subtotal: {{ cart.total_price | money }}</h3>
-                        <div class="my-2">
-                            <button
-                                name="update"
-                                type="submit"
-                                class="w-full p-3 border border-gray-600 text-gray-600 font-medium hover:bg-gray-600 hover:text-white"
-                            >
-                                Update Cart
-                            </button>
-                        </div>
-                        <div class="my-2">
-                            <button 
-                                name="checkout"
-                                type="submit"
-                                class="w-full p-3 border border-gray-600 font-medium bg-gray-600 text-white"
-                            >
-                                Checkout
-                            </button>
-                        </div>
+                        {% for block in section.blocks %}
+                            {% case block.type %}
+                                {% when 'subtotal' %}
+                                    <h3 class="text-xl">Subtotal: {{ cart.total_price | money }}</h3>
+                                {% when 'update_button' %}
+                                    <div class="my-2">
+                                        <button
+                                            name="update"
+                                            type="submit"
+                                            class="w-full p-3 border border-gray-600 text-gray-600 font-medium hover:bg-gray-600 hover:text-white"
+                                        >
+                                            Update Cart
+                                        </button>
+                                    </div>
+                                {% when 'checkout_button' %}
+                                    <div class="my-2">
+                                        <button 
+                                            name="checkout"
+                                            type="submit"
+                                            class="w-full p-3 border border-gray-600 font-medium bg-gray-600 text-white"
+                                        >
+                                            Checkout
+                                        </button>
+                                    </div>
+                            {% endcase %}
+                        {% endfor %}
                     </div>
                 </div>
             </form>
@@ -89,3 +96,26 @@
         </d>
     </div>        
 {% endif %}
+
+{% schema %}
+    {
+        "name": "Template Cart",
+        "blocks": [
+            {
+                "type": "subtotal",
+                "name": "Subtotal",
+                "limit": 1
+            },
+            {
+                "type": "update_button",
+                "name": "Update Button",
+                "limit": 1
+            },
+            {
+                "type": "checkout_button",
+                "name": "Checkout Button",
+                "limit": 1
+            }
+        ]
+    }
+{% endschema %}
