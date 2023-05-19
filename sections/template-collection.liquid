@@ -1,5 +1,5 @@
 <div class="px-4 py-8">
-    {% paginate collection.products by 6 %}
+    {% paginate collection.products by section.settings.number_of_products %}
         <h1 class="text-3xl text-center">{{ collection.title }}</h1>
         <div class="max-w-6xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -33,4 +33,19 @@
     {% endpaginate %}
 </div>
 
-
+{% schema %}
+    {
+        "name": "Collections Template",
+        "settings": [
+            {
+                "type": "range",
+                "id": "number_of_products",
+                "default": 6,
+                "label": "Number of products shown",
+                "min": 1,
+                "max": 15,
+                "step": 1
+            }
+        ]
+    }
+{% endschema %}
