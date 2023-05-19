@@ -681,6 +681,10 @@ video {
   height: 5rem;
 }
 
+.h-full {
+  height: 100%;
+}
+
 .w-4 {
   width: 1rem;
 }
@@ -965,6 +969,11 @@ video {
   padding-bottom: 1rem;
 }
 
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
 .pb-3 {
   padding-bottom: 0.75rem;
 }
@@ -1070,6 +1079,11 @@ video {
 .text-red-300 {
   --tw-text-opacity: 1;
   color: rgb(252 165 165 / var(--tw-text-opacity));
+}
+
+.text-gray-700 {
+  --tw-text-opacity: 1;
+  color: rgb(55 65 81 / var(--tw-text-opacity));
 }
 
 .underline {
@@ -1202,6 +1216,10 @@ video {
 
   .md\:flex-1 {
     flex: 1 1 0%;
+  }
+
+  .md\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .md\:flex-row {
