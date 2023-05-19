@@ -1,0 +1,40 @@
+{% if pagination.pages > 0 %}
+    <nav role="navigation" class="flex justify-center my-8">
+        {% if pagination.previous.url %}
+            <a 
+                href="{{ pagination.previous.url }}" 
+                class="border border-gray-600 text-gray-600 hover:bg-gray-300 hover:text-white px-8 py-3 mx-1 rounded-sm font-medium"
+            >
+                {{ pagination.previous.title }}
+            </a>
+        {% endif %}
+
+        {% for part in pagination.parts %}
+            {% if part.is_link %}
+                <a 
+                    href="{{ part.url }}" 
+                    class="border border-gray-600 text-gray-600 hover:bg-gray-300 hover:text-white px-8 py-3 mx-1 rounded-sm font-medium"
+                >
+                    {{ part.title }}
+                </a>
+                {% else %}
+                {% comment %} if click on the page youre on it won't link {% endcomment %}
+                    <span
+                        class="text-white bg-gray-800 px-8 py-3 mx-1 rounded-sm font-medium"
+                    >
+                        {{ part.title }}
+                    </span>
+            {% endif %}
+            
+        {% endfor %}
+
+        {% if pagination.next.url %}
+            <a 
+                href="{{ pagination.next.url }}" 
+                class="border border-gray-600 text-gray-600 hover:bg-gray-300 hover:text-white px-8 py-3 mx-1 rounded-sm font-medium"
+            >
+                {{ pagination.next.title }}
+            </a>
+        {% endif %}
+    </nav>
+{% endif %}
