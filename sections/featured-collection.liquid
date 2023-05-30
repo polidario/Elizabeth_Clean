@@ -1,0 +1,29 @@
+<div class="flex flex-col items-center my-8">
+    <h1 class="text-center text-3xl">{{ section.settings.title }}</h1>
+    <div class="max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {% for product in section.settings.featured_collection.products %}
+                {% render 'product-card', product: product %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% schema %}
+    {
+        "name": "Featured Collection",
+        "settings": [
+            {
+                "type": "text",
+                "id": "title",
+                "default": "Featured Collection",
+                "label": "Title"
+            },
+            {
+                "type": "collection",
+                "id": "featured_collection",
+                "label": "Collection"
+            }
+        ]
+    }
+{% endschema %}
