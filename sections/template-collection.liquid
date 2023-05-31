@@ -1,4 +1,6 @@
+
 <div class="px-4 py-8">
+    <a href="{{ routes.collections_url }}" class="text-base text-gray-500 hover:underline text-center block my-4">Go back to collections</a>
     {% paginate collection.products by section.settings.number_of_products %}
         <h1 class="text-3xl text-center">{{ collection.title }}</h1>
         <div class="max-w-6xl mx-auto">
