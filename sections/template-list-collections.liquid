@@ -1,0 +1,19 @@
+{% for collection in collections %}
+    {% if collection.all_products_count > 0 %}
+        <div class="w-full py-6 px-3">
+            <div class="border bg-white overflow-hidden">
+                <a href="{{ collection.url }}">
+                    <div class="h-80 overflow-hidden">
+                        {% if collection.featured_image != blank %}
+                            {% assign collection_image = collection.featured_image %}
+                        {% else %}
+                            {% assign collection_image = collection.products.first.image %}    
+                        {% endif %}
+
+                        <img src="{{ collection_image | image_url: width: 500 }}" alt="{{ collection.title | escape }}">
+                    </div>
+                </a>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
