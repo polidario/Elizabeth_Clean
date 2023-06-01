@@ -698,6 +698,10 @@ video {
   height: 100vh;
 }
 
+.h-94 {
+  height: 22rem;
+}
+
 .w-20 {
   width: 5rem;
 }
@@ -1283,6 +1287,10 @@ video {
     margin-bottom: 4rem;
   }
 
+  .md\:block {
+    display: block;
+  }
+
   .md\:flex {
     display: flex;
   }
@@ -1309,6 +1317,10 @@ video {
 
   .md\:flex-1 {
     flex: 1 1 0%;
+  }
+
+  .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .md\:grid-cols-3 {

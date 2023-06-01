@@ -1,0 +1,17 @@
+{% case media.media_type %}
+    {% when 'image' %}
+        <img src="{{ media | image_url: width: 500 }}" alt="{{ media.preview_image.alt }}"
+            class="w-full h-full object-cover"
+        >
+
+    {% when 'external_video' %}
+        {% comment %} video link {% endcomment %}
+        {{ media | external_video_tag: class: 'w-full h-80 object-cover' }}
+    {% when 'video' %}
+        {% comment %} uploaded video {% endcomment %}
+        {{ media | video_tag: controls: true, class: 'w-full h-80 object-cover' }}
+    {% when 'model' %}
+        {{ media | model_viewer_tag }}
+    {% else %}
+        {{ media | media_tag }}
+{% endcase %}
