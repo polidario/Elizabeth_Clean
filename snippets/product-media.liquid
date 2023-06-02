@@ -3,7 +3,6 @@
         <img src="{{ media | image_url: width: 500 }}" alt="{{ media.preview_image.alt }}"
             class="w-full h-full object-cover"
         >
-
     {% when 'external_video' %}
         {% comment %} video link {% endcomment %}
         {{ media | external_video_tag: class: 'w-full h-80 object-cover' }}
