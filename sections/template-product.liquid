@@ -5,11 +5,14 @@
   
 <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
 
+{% assign selected_variant = product.selected_or_first_available_variant %}
+
 <style>
     .swiper-button-prev, .swiper-button-next { color: black; top: auto !important; height: 20px;}
     .swiper-button-prev::after, .swiper-button-next::after { font-size: 20px;}
     .swiper-pagination { bottom: 0 !important; }
     .swiper-pagination-bullet-active {background: black !important; }
+    .product--information { height: fit-content }
 </style>
 
 <div class="max-w-6xl mx-auto my-8">
@@ -40,7 +43,99 @@
             </div>
         </div>
 
-        <div class="product--information"></div>
+
+        <div class="product--information sticky top-5 p-2">
+            {% form 'product', product %}
+                <input type="hidden" name="id" value="{{ selected_variant.id }}">
+
+                {% for block in section.blocks %}
+                    {% case block.type %}
+                        {% when 'vendor' %}
+                            <div class="my-3">
+                                <span class="text-xs text-gray-500">{{ product.vendor }}</span>
+                            </div>
+                        {% when 'title' %}
+                            <div class="my-3">
+                                <h1 class="text-3xl text-gray-900">{{ product.title }}</h1>
+                            </div>
+                        {% when 'price' %}
+                            <div class="my-3">
+                                <span class="text-base text-gray-500 line-through">{{ selected_variant.compare_at_price | money }}</span>
+                                <span class="text-lg text-gray-900">{{ selected_variant.price | money }}</span>
+            
+                                {% if selected_variant.price < selected_variant.compare_at_price %}
+                                    <span class="px-5 py-1 text-sm font-bold bg-red-500 rounded-full text-white mx-44">Sale</span>
+                                {% endif %}
+                            </div>
+                        {% when 'variant_selector' %}
+                            <div class="my-3">
+                                {% unless product.has_only_default_variant %}
+                                    <div data-url="{{ product.url }}" data-section="{{ section.id }}" >
+                                        {% for option in product.options_with_values %}
+                                            <label for="Option-{{ section.id }}-{{ forloop.index0 }}">{{ option.name }}</label>
+                                            <div class="my-2">
+                                                <select 
+                                                    name="options[{{ option.name | escape }}]" 
+                                                    id="Option-{{ section.id }}-{{ forloop.index0 }}"
+                                                    class="w-full border py-1 px-3"
+                                                >
+                                                    {% for value in option.values %}
+                                                        <option 
+                                                            value="{{ value | escape }}"
+                                                            {% if option.selected_value == value %}
+                                                                selected="selected"
+                                                            {% endif %}
+                                                        >
+                                                            {{ value }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endunless %}
+                            </div>
+                        {% when 'quantity' %}
+                            <div class="my-3">
+                                <label for="Quantity={{ section.id }}">Quantity</label>
+                                <div class="my-2">
+                                    <input 
+                                        type="number" 
+                                        name="quantity" 
+                                        id="Quantity-{{ section.id }}" 
+                                        value="1" 
+                                        min="1"
+                                        class="w-full border px-3 py-3"
+                                    >
+                                </div>
+                            </div>
+                        {% when 'description' %}
+                            <div class="my-3">
+                                <p class="text-gray-700">
+                                    {{ product.description }}
+                                </p>
+                            </div>
+                        {% when 'checkout_buttons' %}
+                            <div class="my-3">
+                                <button
+                                    type="submit"
+                                    name="add"
+                                    class="w-full px-6 py-4 bg-gray-900 text-white hover:bg:gray-700 rounded-sm my-2"
+                                    {% if selected_variant.available == false %}
+                                        disabled
+                                    {% endif %}
+                                >
+                                    {% if selected_variant.available == false %}
+                                        Sold Out
+                                    {% else %}
+                                        Add to Cart
+                                    {% endif %}
+                                </button>
+                            </div>                            
+                    {% endcase %}
+                {% endfor %}
+            {% endform %}
+        </div>
     </div>
 </div>
 
@@ -56,3 +151,47 @@
         }
     })
 </script>
+
+{% schema %}
+    {
+        "name": "Product",
+        "blocks": [
+            {
+                "type": "vendor",
+                "name": "Vendor",
+                "limit": 1
+            },
+            {
+                "type": "title",
+                "name": "Title",
+                "limit": 1
+            },
+            {
+                "type": "price",
+                "name": "Price",
+                "limit": 1
+            },
+            {
+                "type": "variant_selector",
+                "name": "Variant Selector",
+                "limit": 1
+            },
+            {
+                "type": "quantity",
+                "name": "Quantity",
+                "limit": 1
+            },
+            {
+                "type": "description",
+                "name": "Description",
+                "limit": 1
+            },
+            {
+                "type": "checkout_buttons",
+                "name": "Checkout Button",
+                "limit": 1
+            }
+        ]
+
+}
+{% endschema %}
