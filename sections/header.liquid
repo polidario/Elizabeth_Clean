@@ -1,0 +1,135 @@
+ {% assign main_menu_linklist = linklists[section.settings.menu].links %}
+<div class="relative bg-white" x-data="{ mobileMenuOpen: false }">
+    <div class="mx-auto px-4 sm:px-6">
+      <div class="flex justify-between items-center py-6 md:justify-start md:space-x-10">
+        <!-- STORE NAME / STORE LOGO -->
+        <div class="flex justify-start lg:flex-1 truncate">
+          <h1 class="text-xl font-bold truncate">{{ shop.name }}</h1>
+        </div>
+
+        <div x-data="" class="-mr-2 -my-2 ml-3 md:hidden">
+            <button type="button" x-on:click="mobileMenuOpen = true" class="bg-white p-2 inline-flex items-center justify-center focus:outline-none">
+                {% render 'icon-menu' %}
+            </button>
+        </div>       
+  
+        <!-- NAVIGATION MENU -->
+        <nav x-data="{ open: false }" class="hidden md:flex space-x-10">
+            {% for link in main_menu_linklist %}
+                {% if link.links != blank %}
+                    <div class="relative">
+                        <button type="button" x-on:click="open = ! open" class="inline-flex items-center text-base text-gray-500 hover:text-gray-900">
+                            {{ link.title }}
+                            {% render 'icon-chevron-down' %}
+                        </button>
+                        <!-- STEP 1: Place the div under the button tag -->
+
+                        <div x-show="open" @click.away="open = false" class="absolute z-10 -ml-5 mt-5 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2">
+                            <div class="shadow-lg border ring-black ring-opacity-5 overflow-hidden rounded-lg">
+                                <div class="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
+                                    {% for childLink in link.links %}
+                                        <a href="{{ childLink.url }}" class="-m-3 p-3 flex items start rounded-lg hover:bg-gray-100">
+                                            <div class="ml-4">
+                                                <p class="text-gray-900 text-base font-medium">
+                                                {{ childLink.title }}
+                                                </p>
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                {% else %}
+                    <div class="relative">
+                        <a href="{{ link.url }}" class="text-base text-gray-500 hover:text-gray-900">{{ link.title }}</a>
+                    </div>
+                {% endif %}
+            {% endfor %}
+  
+          
+        </nav>
+  
+        <div class="hidden md:flex items-center justify-end md:flex-1 space-x-5">
+          <a href="{{ routes.cart_url }}" class="whitespace-nowrap text-base text-gray-500 hover:text-gray-900">
+            {% render 'icon-shopping-bag' %}
+          </a>
+          {% if shop.customer_accounts_enabled %}
+            <a href="{{ routes.account_login_url }}" class="text-base text-gray-500 hover:text-gray-900">Login</a>
+            <a href="{{ routes.account_register_url }}" class="text-base text-gray-500 hover:text-gray-900">Register</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- MOBILE MENU CONTAINER -->
+    <div x-show="mobileMenuOpen" class="absolute z-10 top-0 inset-x-0 p-2 transform origin-top-left md:hidden">
+        <div class="shadow-lg rounded-lg ring-1 ring-black ring-opacity-5 bg-white w-full">
+            <div class="p-5 divide-y-2 divide-gray-50">
+
+                <!-- MOBILE MENU HEADER TITLE PLUS CLOSE BUTTON -->
+                <div class="flex items-center justify-between pb-3">
+                    <div>
+                        <h1 class="text-lg text-gray-500">{{ section.settings.mobile_menu_title }}</h1>
+                    </div>
+                    <div class="-mr-2">
+                        <button type="button" x-on:click="mobileMenuOpen = false" class="bg-white rounded-md p-2 text-gray-500">
+                            {% render 'icon-close' %}
+                        </button>
+                    </div>
+                </div>
+
+                <!-- NAVIGATION LINKS FOR MOBILE MENU -->
+                <div class="pt-3">
+                    <nav class="grid gap-y-7">
+                        {% for link in main_menu_linklist %}
+                            {% assign link_handle = link.handle %}
+                            {% if link.links != blank %}
+                                <div x-data="{ {{ link_handle }}: false }" class="relative">
+                                    <button type="button" 
+                                        x-on:click="{{ link_handle }} = ! {{ link_handle}}"
+                                        class="text-base text-gray-500 hover:text-gray-900 flex items-center justify-between w-full">
+                                        <div>{{ link.title }}</div>
+                                        {% render 'icon-chevron-down' %}
+                                    </button>
+                                    <div x-show="{{ link_handle }}" class="grid gap-y-7 py-3">
+                                        {% for childLink in link.links %}
+                                            <a href="#" class="-m-3 p-3 mt-2 flex items-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-50">
+                                                <span class="ml-3 text-base font-medium text-gray-500">{{ childLink.title }}</span>
+                                            </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% else %}
+                                <a href="{{ link.url }}" class="-m-3 p-3 flex items-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-50">
+                                    {{ link.title }}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  {% schema %}
+    {
+        "name": "Header",
+        "settings": [
+            {
+                "type": "text",
+                "id": "mobile_menu_title",
+                "label": "Title",
+                "default": "Menu",
+                "info": "THis is the title of the mobile menu pane"
+            },
+            {
+                "type": "link_list",
+                "id": "menu",
+                "label": "Header Menu",
+                "default": "main-menu"
+            }
+        ]
+    }
+  {% endschema %}
